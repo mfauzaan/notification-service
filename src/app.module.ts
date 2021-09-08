@@ -3,6 +3,7 @@ import { ConfigModule } from '@nestjs/config';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { BullModule } from '@nestjs/bull';
+import { TypegooseModule } from 'nestjs-typegoose';
 
 @Module({
   imports: [
@@ -13,6 +14,10 @@ import { BullModule } from '@nestjs/bull';
       },
     }),
     ConfigModule.forRoot(),
+    TypegooseModule.forRoot(process.env.MONGO_CONNECTION_URI, {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+    }),
   ],
   controllers: [AppController],
   providers: [AppService],
