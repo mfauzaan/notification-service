@@ -4,6 +4,10 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { BullModule } from '@nestjs/bull';
 import { TypegooseModule } from 'nestjs-typegoose';
+import { NotificationsModule } from './modules/notifications/notifications.module';
+import { ChannelsModule } from './modules/channels/channels.module';
+import { NotificationTypesModule } from './modules/notification-types/notification-types.module';
+import { UsersModule } from './modules/users/users.module';
 
 @Module({
   imports: [
@@ -18,6 +22,10 @@ import { TypegooseModule } from 'nestjs-typegoose';
       useNewUrlParser: true,
       useUnifiedTopology: true,
     }),
+    NotificationsModule,
+    ChannelsModule,
+    NotificationTypesModule,
+    UsersModule,
   ],
   controllers: [AppController],
   providers: [AppService],
