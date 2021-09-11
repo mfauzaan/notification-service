@@ -67,5 +67,7 @@ export class ChannelsFactory {
     console.warn('UI notification send to the user', {
       content,
     });
+
+    return content;
   }
 }

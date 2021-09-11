@@ -46,7 +46,7 @@ export class Notification {
   @Prop()
   @Expose()
   @ApiProperty()
-  content: string;
+  message: string;
 
   @Expose()
   @ApiProperty()
