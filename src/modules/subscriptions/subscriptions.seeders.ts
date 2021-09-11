@@ -49,6 +49,10 @@ export const SubscriptionSeeds = [
         channel: 'UI',
         isSubscribe: true,
       },
+      {
+        channel: 'email',
+        isSubscribe: false,
+      },
     ],
   },
 ];
