@@ -6,7 +6,7 @@ import { InjectModel } from 'nestjs-typegoose';
 import { NotificationType } from 'src/database/schemas/notification-types.schema';
 
 @Injectable()
-export class NotificationTypesService {
+export class NotificationTypesService implements OnModuleInit {
   constructor(
     @InjectModel(NotificationType)
     private readonly notificationTypeModel: ReturnModelType<
