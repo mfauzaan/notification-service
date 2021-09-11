@@ -16,7 +16,8 @@ export class SubscriptionsService {
     channel: string,
     { userId, companyId }: { userId: string; companyId: string },
   ): Promise<boolean> {
-    let isSubscribed = true; // if not in the list consider as subscriped for backward compatiblies:
+    // if not in the list consider as subscriped for backward compatiblies:
+    let isSubscribed = true;
 
     const subscription = await this.subscriptionModel.findOne({
       $or: [
