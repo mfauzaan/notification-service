@@ -35,7 +35,7 @@ export class NotificationTypesService implements OnModuleInit {
     });
 
     if (!notificationType || isEmpty(notificationType.templates))
-      throw new BadRequestException('Templete not found');
+      throw new BadRequestException('Template not found');
 
     return {
       ...notificationType,
@@ -43,7 +43,7 @@ export class NotificationTypesService implements OnModuleInit {
     };
   }
 
-  renderTemplete(content, user): string {
+  renderTemplate(content, user): string {
     if (!content) {
       return '';
     }

@@ -22,11 +22,11 @@ export class ChannelsFactory {
 
     // Render content and title:
     const [title, content] = await Promise.all([
-      this.notificationTypesService.renderTemplete(
+      this.notificationTypesService.renderTemplate(
         notificationType.templates.title,
         user,
       ),
-      this.notificationTypesService.renderTemplete(
+      this.notificationTypesService.renderTemplate(
         notificationType.templates.content,
         user,
       ),

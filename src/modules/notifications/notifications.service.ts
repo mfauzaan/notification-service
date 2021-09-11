@@ -35,10 +35,10 @@ export class NotificationsService {
 
     if (!isSubscribed)
       throw new BadRequestException(
-        'User/Company is not subscriped to the channel',
+        'User/Company is not subscribed to the channel',
       );
 
-    // Get the templete:
+    // Get the template:
     const [notificationType, user] = await Promise.all([
       this.notificationTypesService.findByTemplate(
         createNotificationDto.notificationType,

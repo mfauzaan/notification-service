@@ -25,7 +25,7 @@ export class SubscriptionsService implements OnModuleInit {
     channel: string,
     { userId, companyId }: { userId: string; companyId: string },
   ): Promise<boolean> {
-    // if not in the list consider as subscriped for backward compatiblies:
+    // if not in the list consider as subscribed for backward compatibilities:
     let isSubscribed = true;
 
     const subscription = await this.subscriptionModel.findOne({
