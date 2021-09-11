@@ -1,9 +1,10 @@
 import { Injectable, OnModuleInit } from '@nestjs/common';
 import { ReturnModelType } from '@typegoose/typegoose';
-import { isEmpty } from 'class-validator';
+import { find } from 'lodash';
 import { InjectModel } from 'nestjs-typegoose';
 import { Subscription } from 'src/database/schemas/subscription.schema';
 import { GetUserSubscriptionsOptionsDto } from './dto/get-user-subscriptions.dto';
+import { SubscriptionSeeds } from './subscriptions.seeders';
 
 @Injectable()
 export class SubscriptionsService implements OnModuleInit {
@@ -13,58 +14,7 @@ export class SubscriptionsService implements OnModuleInit {
   ) {}
 
   async onModuleInit() {
-    const seedData = [
-      {
-        subscribeId: '6139e643ffa5f94b5fefae22',
-        subscribeType: 'user',
-        channels: [
-          {
-            channel: 'UI',
-            isSubscribe: true,
-          },
-          {
-            channel: 'email',
-            isSubscribe: false,
-          },
-        ],
-      },
-      {
-        subscribeId: '6138a385dc0d997f5c54585b',
-        subscribeType: 'company',
-        channels: [
-          {
-            channel: 'UI',
-            isSubscribe: true,
-          },
-        ],
-      },
-      {
-        subscribeId: '6139e643ffa5f94b5fefae21',
-        subscribeType: 'user',
-        channels: [
-          {
-            channel: 'UI',
-            isSubscribe: true,
-          },
-          {
-            channel: 'email',
-            isSubscribe: true,
-          },
-        ],
-      },
-      {
-        subscribeId: '6138a385dc0d997f5c54585c',
-        subscribeType: 'company',
-        channels: [
-          {
-            channel: 'UI',
-            isSubscribe: true,
-          },
-        ],
-      },
-    ];
-
-    seedData.forEach((seed: any) => {
+    SubscriptionSeeds.forEach((seed: any) => {
       this.subscriptionModel
         .findOneAndUpdate(seed, seed, { upsert: true, useFindAndModify: false })
         .exec();
@@ -87,8 +37,12 @@ export class SubscriptionsService implements OnModuleInit {
       'channels.isSubscribe': false,
     });
 
-    if (subscription && !isEmpty(subscription.channels)) {
-      isSubscribed = false;
+    if (subscription) {
+      const hasChannel = !!find(subscription?.channels, {
+        channel,
+        isSubscribe: true,
+      });
+      isSubscribed = hasChannel;
     }
 
     return isSubscribed;

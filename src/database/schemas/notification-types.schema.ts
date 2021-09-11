@@ -41,7 +41,7 @@ export class NotificationType {
   name: string;
 
   @Prop({
-    type: Schema.Types.Map,
+    type: Schema.Types.Array,
   })
   @Expose()
   @ApiProperty()

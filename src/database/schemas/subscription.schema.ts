@@ -45,7 +45,7 @@ export class Subscription {
   subscribeType: string;
 
   @Prop({
-    type: Schema.Types.Map,
+    type: Schema.Types.Array,
   })
   @Expose()
   @ApiProperty()

@@ -5,6 +5,7 @@ import { first, isEmpty } from 'lodash';
 import { render } from 'mustache';
 import { InjectModel } from 'nestjs-typegoose';
 import { NotificationType } from 'src/database/schemas/notification-types.schema';
+import { NotificationTypesSeeds } from './notification-types.seeders';
 
 @Injectable()
 export class NotificationTypesService implements OnModuleInit {
@@ -16,44 +17,7 @@ export class NotificationTypesService implements OnModuleInit {
   ) {}
 
   async onModuleInit() {
-    const seedData = [
-      {
-        name: 'monthly-payslip',
-        templates: [
-          {
-            title: 'Pay slip for {{month}} {{year}}',
-            content: 'Hi {{fullName}}, Your salary has been processed',
-            channel: 'email',
-          },
-        ],
-      },
-      {
-        name: 'leaves-reminder',
-        templates: [
-          {
-            content:
-              'Hi {{firstName}}, Reminder to book your leaves before it expires.',
-            channel: 'UI',
-          },
-        ],
-      },
-      {
-        name: 'happy-birthday',
-        templates: [
-          {
-            content: 'Happy Birthday {{firstName}}.',
-            channel: 'UI',
-          },
-          {
-            title: '{{companyName}} is wishing you a happy birthday',
-            content: 'Happy Birthday {{firstName}}.',
-            channel: 'email',
-          },
-        ],
-      },
-    ];
-
-    seedData.forEach((seed: any) => {
+    NotificationTypesSeeds.forEach((seed: any) => {
       this.notificationTypeModel
         .findOneAndUpdate(seed, seed, { upsert: true, useFindAndModify: false })
         .exec();
