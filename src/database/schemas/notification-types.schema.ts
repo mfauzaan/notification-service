@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { Prop } from '@typegoose/typegoose';
+import { modelOptions, Prop, Severity } from '@typegoose/typegoose';
 import { Expose } from 'class-transformer';
 import { Schema } from 'mongoose';
 
@@ -31,6 +31,7 @@ export class Templates {
   updatedAt: string;
 }
 
+@modelOptions({ options: { allowMixed: Severity.ALLOW } })
 export class NotificationType {
   @Expose()
   _id: string;

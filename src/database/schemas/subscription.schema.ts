@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { Prop } from '@typegoose/typegoose';
+import { modelOptions, Prop, Severity } from '@typegoose/typegoose';
 import { Expose } from 'class-transformer';
 import { Schema } from 'mongoose';
 
@@ -30,6 +30,7 @@ export class SubscriptionChannel {
   updatedAt: string;
 }
 
+@modelOptions({ options: { allowMixed: Severity.ALLOW } })
 export class Subscription {
   @Expose()
   _id: string;
