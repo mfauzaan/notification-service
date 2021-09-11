@@ -1,9 +1,9 @@
 import { Injectable, OnModuleInit } from '@nestjs/common';
 import { ReturnModelType } from '@typegoose/typegoose';
 import { isEmpty } from 'class-validator';
-import { first } from 'lodash';
 import { InjectModel } from 'nestjs-typegoose';
 import { Subscription } from 'src/database/schemas/subscription.schema';
+import { GetUserSubscriptionsOptionsDto } from './dto/get-user-subscriptions.dto';
 
 @Injectable()
 export class SubscriptionsService implements OnModuleInit {
@@ -46,5 +46,19 @@ export class SubscriptionsService implements OnModuleInit {
     }
 
     return isSubscribed;
+  }
+
+  async getByUser(options: GetUserSubscriptionsOptionsDto) {
+    const { userId, companyId } = options;
+
+    // Get User:
+    const subscription = await this.subscriptionModel.find({
+      $or: [
+        { subscribeId: userId, subscribeType: 'user' },
+        { subscribeId: companyId, subscribeType: 'company' },
+      ],
+    });
+
+    return subscription;
   }
 }
