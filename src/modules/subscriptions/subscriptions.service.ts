@@ -13,16 +13,62 @@ export class SubscriptionsService implements OnModuleInit {
   ) {}
 
   async onModuleInit() {
-    // await this.subscriptionModel.create({
-    //   subscribeId: '6139e643ffa5f94b5fefae22',
-    //   subscribeType: 'user',
-    //   channels: [
-    //     {
-    //       channel: 'UI',
-    //       isSubscribe: false,
-    //     },
-    //   ],
-    // });
+    const seedData = [
+      {
+        subscribeId: '6139e643ffa5f94b5fefae22',
+        subscribeType: 'user',
+        channels: [
+          {
+            channel: 'UI',
+            isSubscribe: true,
+          },
+          {
+            channel: 'email',
+            isSubscribe: false,
+          },
+        ],
+      },
+      {
+        subscribeId: '6138a385dc0d997f5c54585b',
+        subscribeType: 'company',
+        channels: [
+          {
+            channel: 'UI',
+            isSubscribe: true,
+          },
+        ],
+      },
+      {
+        subscribeId: '6139e643ffa5f94b5fefae21',
+        subscribeType: 'user',
+        channels: [
+          {
+            channel: 'UI',
+            isSubscribe: true,
+          },
+          {
+            channel: 'email',
+            isSubscribe: true,
+          },
+        ],
+      },
+      {
+        subscribeId: '6138a385dc0d997f5c54585c',
+        subscribeType: 'company',
+        channels: [
+          {
+            channel: 'UI',
+            isSubscribe: true,
+          },
+        ],
+      },
+    ];
+
+    seedData.forEach((seed: any) => {
+      this.subscriptionModel
+        .findOneAndUpdate(seed, seed, { upsert: true, useFindAndModify: false })
+        .exec();
+    });
   }
 
   async isSubscribed(

@@ -1,5 +1,6 @@
 import { BadRequestException, Injectable, OnModuleInit } from '@nestjs/common';
 import { ReturnModelType } from '@typegoose/typegoose';
+import { format } from 'date-fns';
 import { first, isEmpty } from 'lodash';
 import { render } from 'mustache';
 import { InjectModel } from 'nestjs-typegoose';
@@ -15,16 +16,48 @@ export class NotificationTypesService implements OnModuleInit {
   ) {}
 
   async onModuleInit() {
-    // await this.notificationTypeModel.create({
-    //   name: 'monthly-payslip',
-    //   templates: [
-    //     {
-    //       title: 'Happy Birthday {{firstName}}',
-    //       conent: '{{companyName}} is wishing you a happy birthday',
-    //       channel: 'UI',
-    //     },
-    //   ],
-    // });
+    const seedData = [
+      {
+        name: 'monthly-payslip',
+        templates: [
+          {
+            title: 'Pay slip for {{month}} {{year}}',
+            content: 'Hi {{fullName}}, Your salary has been processed',
+            channel: 'email',
+          },
+        ],
+      },
+      {
+        name: 'leaves-reminder',
+        templates: [
+          {
+            content:
+              'Hi {{firstName}}, Reminder to book your leaves before it expires.',
+            channel: 'UI',
+          },
+        ],
+      },
+      {
+        name: 'happy-birthday',
+        templates: [
+          {
+            content: 'Happy Birthday {{firstName}}.',
+            channel: 'UI',
+          },
+          {
+            title: '{{companyName}} is wishing you a happy birthday',
+            content: 'Happy Birthday {{firstName}}.',
+            channel: 'email',
+          },
+        ],
+      },
+    ];
+
+    seedData.forEach((seed: any) => {
+      this.notificationTypeModel
+        .findOneAndUpdate(seed, seed, { upsert: true, useFindAndModify: false })
+        .exec();
+    });
   }
 
   async findAll(): Promise<NotificationType[]> {
@@ -57,6 +90,8 @@ export class NotificationTypesService implements OnModuleInit {
       fullName: `${user.firstName} ${user.lastName}`,
       dob: user.dob,
       companyName: user.company.name,
+      year: format(new Date(), 'yyyy'),
+      month: format(new Date(), 'MMMM'),
     };
 
     return render(content, mappedValues);
