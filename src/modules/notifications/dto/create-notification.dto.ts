@@ -1,10 +1,16 @@
-import { ApiProperty } from '@nestjs/swagger';
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { IsMongoId, IsOptional, IsString } from 'class-validator';
 
 export class CreateNotificationDto {
-  @ApiProperty()
+  @ApiPropertyOptional()
+  @IsOptional()
   @IsMongoId()
-  entityId: string;
+  entityId?: string;
+
+  @ApiPropertyOptional()
+  @IsOptional()
+  @IsString()
+  entity?: string;
 
   @ApiProperty()
   @IsMongoId()
@@ -13,10 +19,6 @@ export class CreateNotificationDto {
   @ApiProperty()
   @IsString()
   notificationType: string;
-
-  @ApiProperty()
-  @IsString()
-  entity: string;
 
   @ApiProperty()
   @IsMongoId()
