@@ -5,6 +5,7 @@ import { Queue } from 'bull';
 import { InjectModel } from 'nestjs-typegoose';
 import { Notification } from 'src/database/schemas/notification.schema';
 import { ChannelsFactory } from '../channels/channels.factory';
+import { NotificationTypesService } from '../notification-types/notification-types.service';
 import { UsersService } from '../users/users.service';
 import { CreateNotificationDto } from './dto/create-notification.dto';
 import { UpdateNotificationDto } from './dto/update-notification.dto';
@@ -18,16 +19,24 @@ export class NotificationsService {
     private readonly notificationsQueue: Queue,
     private readonly userDetails: UsersService,
     private readonly channelsFactory: ChannelsFactory,
+    private readonly notificationTypesService: NotificationTypesService,
   ) {}
 
   async create(createNotificationDto: CreateNotificationDto) {
     const { userId, companyId } = createNotificationDto;
+
+    // Get the templete:
+    const notificationType = await this.notificationTypesService.findByTemplate(
+      createNotificationDto.notificationType,
+      createNotificationDto.channel,
+    );
+
+    // check user:
     // Create notification:
     const notification = await this.notificationModel.create(
       createNotificationDto,
     );
 
-    // Get the templete:
     // Validate the request:
     // Get User details:
     const user = await this.userDetails.getUserDetails({ userId, companyId });
@@ -60,10 +69,6 @@ export class NotificationsService {
       },
       updateNotificationDto,
     );
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} notification`;
   }
 
   async sendNotifications(options) {

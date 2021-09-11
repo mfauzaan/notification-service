@@ -51,11 +51,6 @@ export class NotificationType {
   @ApiProperty()
   templates: Templates[];
 
-  @Prop()
-  @Expose()
-  @ApiProperty()
-  status: string;
-
   @Expose()
   @ApiProperty()
   createdAt: string;

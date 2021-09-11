@@ -1,12 +1,11 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable, OnModuleInit } from '@nestjs/common';
 import { ReturnModelType } from '@typegoose/typegoose';
+import { first, isEmpty } from 'lodash';
 import { InjectModel } from 'nestjs-typegoose';
 import { NotificationType } from 'src/database/schemas/notification-types.schema';
-import { CreateNotificationTypeDto } from './dto/create-notification-type.dto';
-import { UpdateNotificationTypeDto } from './dto/update-notification-type.dto';
 
 @Injectable()
-export class NotificationTypesService {
+export class NotificationTypesService implements OnModuleInit {
   constructor(
     @InjectModel(NotificationType)
     private readonly notificationTypeModel: ReturnModelType<
@@ -14,23 +13,35 @@ export class NotificationTypesService {
     >,
   ) {}
 
-  create(createNotificationTypeDto: CreateNotificationTypeDto) {
-    return 'This action adds a new notificationType';
+  async onModuleInit() {
+    // await this.notificationTypeModel.create({
+    //   name: 'monthly-payslip',
+    //   templates: [
+    //     {
+    //       title: 'Happy Birthday {{firstName}}',
+    //       conent: '{{companyName}} is wishing you a happy birthday',
+    //       channel: 'UI',
+    //     },
+    //   ],
+    // });
   }
 
   async findAll(): Promise<NotificationType[]> {
     return await this.notificationTypeModel.find().exec();
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} notificationType`;
-  }
+  async findByTemplate(slug: string, channel: string) {
+    const notificationType = await this.notificationTypeModel.findOne({
+      name: slug,
+      'templates.channel': channel,
+    });
 
-  update(id: number, updateNotificationTypeDto: UpdateNotificationTypeDto) {
-    return `This action updates a #${id} notificationType`;
-  }
+    if (!notificationType || isEmpty(notificationType.templates))
+      throw new BadRequestException('Templete not found');
 
-  remove(id: number) {
-    return `This action removes a #${id} notificationType`;
+    return {
+      ...notificationType,
+      templates: first(notificationType.templates),
+    };
   }
 }
