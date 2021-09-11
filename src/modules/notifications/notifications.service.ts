@@ -6,6 +6,7 @@ import { InjectModel } from 'nestjs-typegoose';
 import { Notification } from 'src/database/schemas/notification.schema';
 import { ChannelsFactory } from '../channels/channels.factory';
 import { NotificationTypesService } from '../notification-types/notification-types.service';
+import { SubscriptionsService } from '../subscriptions/subscriptions.service';
 import { UsersService } from '../users/users.service';
 import { CreateNotificationDto } from './dto/create-notification.dto';
 import { UpdateNotificationDto } from './dto/update-notification.dto';
@@ -20,18 +21,26 @@ export class NotificationsService {
     private readonly userDetails: UsersService,
     private readonly channelsFactory: ChannelsFactory,
     private readonly notificationTypesService: NotificationTypesService,
+    private readonly subscriptionsService: SubscriptionsService,
   ) {}
 
   async create(createNotificationDto: CreateNotificationDto) {
-    const { userId, companyId } = createNotificationDto;
+    const { userId, companyId, channel } = createNotificationDto;
 
     // Get the templete:
     const notificationType = await this.notificationTypesService.findByTemplate(
       createNotificationDto.notificationType,
-      createNotificationDto.channel,
+      channel,
     );
 
     // check user:
+    const isSubscribed = await this.subscriptionsService.isSubscribed(channel, {
+      userId,
+      companyId,
+    });
+
+    console.log(isSubscribed);
+    
     // Create notification:
     const notification = await this.notificationModel.create(
       createNotificationDto,

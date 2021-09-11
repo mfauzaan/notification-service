@@ -1,30 +1,25 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { Prop } from '@typegoose/typegoose';
+import { modelOptions, Prop } from '@typegoose/typegoose';
 import { Expose } from 'class-transformer';
 import { Schema } from 'mongoose';
 
-export class Templates {
+export class SubscriptionChannel {
   @Expose()
   _id: string;
 
-  @Prop()
-  @Expose()
-  @ApiProperty()
-  title: string;
-
   @Prop({
-    type: Schema.Types.Mixed,
+    type: Schema.Types.String,
   })
   @Expose()
   @ApiProperty()
   channel: string;
 
   @Prop({
-    type: Schema.Types.Mixed,
+    type: Schema.Types.Boolean,
   })
   @Expose()
   @ApiProperty()
-  content: Record<string, any>;
+  isSubscribe: boolean;
 
   @Expose()
   @ApiProperty()
@@ -35,21 +30,26 @@ export class Templates {
   updatedAt: string;
 }
 
-export class NotificationType {
+export class Subscription {
   @Expose()
   _id: string;
 
   @Prop()
   @Expose()
   @ApiProperty()
-  name: string;
+  subscribeId: string;
+
+  @Prop()
+  @Expose()
+  @ApiProperty()
+  subscribeType: string;
 
   @Prop({
     type: Schema.Types.Map,
   })
   @Expose()
   @ApiProperty()
-  templates: Templates[];
+  channels: SubscriptionChannel[];
 
   @Expose()
   @ApiProperty()

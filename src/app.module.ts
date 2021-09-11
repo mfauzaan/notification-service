@@ -8,6 +8,7 @@ import { NotificationsModule } from './modules/notifications/notifications.modul
 import { ChannelsModule } from './modules/channels/channels.module';
 import { NotificationTypesModule } from './modules/notification-types/notification-types.module';
 import { UsersModule } from './modules/users/users.module';
+import { SubscriptionsModule } from './modules/subscriptions/subscriptions.module';
 
 @Module({
   imports: [
@@ -26,6 +27,7 @@ import { UsersModule } from './modules/users/users.module';
     ChannelsModule,
     NotificationTypesModule,
     UsersModule,
+    SubscriptionsModule,
   ],
   controllers: [AppController],
   providers: [AppService],
