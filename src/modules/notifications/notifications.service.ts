@@ -1,5 +1,5 @@
 import { InjectQueue } from '@nestjs/bull';
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { ReturnModelType } from '@typegoose/typegoose';
 import { Queue } from 'bull';
 import { InjectModel } from 'nestjs-typegoose';
@@ -27,33 +27,36 @@ export class NotificationsService {
   async create(createNotificationDto: CreateNotificationDto) {
     const { userId, companyId, channel } = createNotificationDto;
 
-    // Get the templete:
-    const notificationType = await this.notificationTypesService.findByTemplate(
-      createNotificationDto.notificationType,
-      channel,
-    );
-
-    // check user:
+    // Check subscription state:
     const isSubscribed = await this.subscriptionsService.isSubscribed(channel, {
       userId,
       companyId,
     });
 
-    console.log(isSubscribed);
-    
+    if (!isSubscribed)
+      throw new BadRequestException(
+        'User/Company is not subscriped to the channel',
+      );
+
+    // Get the templete:
+    const [notificationType, user] = await Promise.all([
+      this.notificationTypesService.findByTemplate(
+        createNotificationDto.notificationType,
+        channel,
+      ),
+      this.userDetails.getUserDetails({ userId, companyId }),
+    ]);
+
     // Create notification:
     const notification = await this.notificationModel.create(
       createNotificationDto,
     );
 
-    // Validate the request:
-    // Get User details:
-    const user = await this.userDetails.getUserDetails({ userId, companyId });
-
     // Push to queue:
     await this.notificationsQueue.add('send-notifications', {
       notification,
       user,
+      notificationType,
     });
 
     return {
@@ -61,14 +64,6 @@ export class NotificationsService {
       message:
         "We've started to process the request, please check the status page for the update",
     };
-  }
-
-  findAll() {
-    return `This action returns all notifications`;
-  }
-
-  findOne(id: number) {
-    return `This action returns a #${id} notification`;
   }
 
   async update(id: string, updateNotificationDto: UpdateNotificationDto) {

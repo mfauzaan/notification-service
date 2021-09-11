@@ -1,16 +1,29 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, OnModuleInit } from '@nestjs/common';
 import { ReturnModelType } from '@typegoose/typegoose';
 import { isEmpty } from 'class-validator';
+import { first } from 'lodash';
 import { InjectModel } from 'nestjs-typegoose';
 import { Subscription } from 'src/database/schemas/subscription.schema';
-import { first } from 'lodash';
 
 @Injectable()
-export class SubscriptionsService {
+export class SubscriptionsService implements OnModuleInit {
   constructor(
     @InjectModel(Subscription)
     private readonly subscriptionModel: ReturnModelType<typeof Subscription>,
   ) {}
+
+  async onModuleInit() {
+    // await this.subscriptionModel.create({
+    //   subscribeId: '6139e643ffa5f94b5fefae22',
+    //   subscribeType: 'user',
+    //   channels: [
+    //     {
+    //       channel: 'UI',
+    //       isSubscribe: false,
+    //     },
+    //   ],
+    // });
+  }
 
   async isSubscribed(
     channel: string,
@@ -24,14 +37,12 @@ export class SubscriptionsService {
         { subscribeId: userId, subscribeType: 'user' },
         { subscribeId: companyId, subscribeType: 'company' },
       ],
-      'channels.type': channel,
+      'channels.channel': channel,
+      'channels.isSubscribe': false,
     });
 
     if (subscription && !isEmpty(subscription.channels)) {
-      const channel = first(subscription.channels);
-      if (!channel?.isSubscribe) {
-        isSubscribed = false;
-      }
+      isSubscribed = false;
     }
 
     return isSubscribed;

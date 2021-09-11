@@ -36,7 +36,6 @@
     "helmet": "^4.6.0",
     "lodash": "^4.17.21",
     "mongoose": "^5.13.8",
-    "mongoose-data-seed": "^2.1.6",
     "mustache": "^4.2.0",
     "nestjs-typegoose": "^7.1.38",
     "reflect-metadata": "^0.1.13",
@@ -85,8 +84,5 @@
     "moduleNameMapper": {
       "^src/(.*)$": "<rootDir>/$1"
     }
-  },
-  "mdSeed": {
-    "seedersFolder": "src/database/seeders"
   }
 }

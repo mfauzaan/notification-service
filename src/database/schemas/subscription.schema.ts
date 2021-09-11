@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { modelOptions, Prop } from '@typegoose/typegoose';
+import { Prop } from '@typegoose/typegoose';
 import { Expose } from 'class-transformer';
 import { Schema } from 'mongoose';
 
