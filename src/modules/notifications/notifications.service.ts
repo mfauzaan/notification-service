@@ -70,7 +70,7 @@ export class NotificationsService {
     const { notification, user } = options;
     try {
       // Dynamic inject function name:
-      await this.channelsFactory.process(notification.channel);
+      await this.channelsFactory.process(notification.channel, options);
 
       // Update status:
       await this.update(notification._id, { status: 'success' });

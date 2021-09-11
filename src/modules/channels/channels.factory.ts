@@ -4,7 +4,7 @@ import { BadRequestException, Injectable, Logger } from '@nestjs/common';
 export class ChannelsFactory {
   private logger = new Logger();
 
-  async process(slug) {
+  async process(slug, options) {
     const channelTypes = {
       email: this.email,
       sms: this.sms,
@@ -14,7 +14,7 @@ export class ChannelsFactory {
 
     if (!channelTypes) throw new BadRequestException('Invalid channel');
 
-    return channelTypes[slug]();
+    return channelTypes[slug](options);
   }
 
   async email() {

@@ -26,16 +26,6 @@ export class Templates {
   @ApiProperty()
   content: Record<string, any>;
 
-  @Prop()
-  @Expose()
-  @ApiProperty()
-  startAt: Record<string, any>;
-
-  @Prop()
-  @Expose()
-  @ApiProperty()
-  status: string;
-
   @Expose()
   @ApiProperty()
   createdAt: string;
