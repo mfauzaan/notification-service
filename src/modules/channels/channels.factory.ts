@@ -1,7 +1,11 @@
 import { BadRequestException, Injectable, Logger } from '@nestjs/common';
+import { NotificationTypesService } from '../notification-types/notification-types.service';
 
 @Injectable()
 export class ChannelsFactory {
+  constructor(
+    private readonly notificationTypesService: NotificationTypesService,
+  ) {}
   private logger = new Logger();
 
   async process(slug, options) {
@@ -14,26 +18,55 @@ export class ChannelsFactory {
 
     if (!channelTypes) throw new BadRequestException('Invalid channel');
 
-    return channelTypes[slug](options);
+    // Render content and header:
+    const { user, notificationType } = options;
+
+    const [title, content] = await Promise.all([
+      this.notificationTypesService.renderTemplete(
+        notificationType.templates.title,
+        user,
+      ),
+      this.notificationTypesService.renderTemplete(
+        notificationType.templates.content,
+        user,
+      ),
+    ]);
+
+    return channelTypes[slug]({
+      ...options,
+      content,
+      title,
+    }).catch(e => this.logger.error(e));
   }
 
-  async email() {
-    console.log('email');
-    return 'UI processed';
+  async email(options) {
+    const { title, content } = options;
+    console.log({
+      title,
+      content,
+    });
   }
 
-  async sms() {
-    console.log('sms');
-    return 'UI processed';
+  async sms(options) {
+    const { content } = options;
+    console.log({
+      content,
+    });
   }
 
-  async whatsapp() {
-    console.log('whatsapp');
-    return 'UI processed';
+  async whatsapp(options) {
+    const { title, content } = options;
+    console.log({
+      title,
+      content,
+    });
   }
 
-  async UI() {
-    console.log('UI');
-    return 'UI processed';
+  async UI(options) {
+    const { title, content } = options;
+    console.log({
+      title,
+      content,
+    });
   }
 }

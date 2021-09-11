@@ -12,19 +12,15 @@ export class Templates {
   @ApiProperty()
   title: string;
 
-  @Prop({
-    type: Schema.Types.Mixed,
-  })
+  @Prop()
   @Expose()
   @ApiProperty()
   channel: string;
 
-  @Prop({
-    type: Schema.Types.Mixed,
-  })
+  @Prop()
   @Expose()
   @ApiProperty()
-  content: Record<string, any>;
+  content: string;
 
   @Expose()
   @ApiProperty()
