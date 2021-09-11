@@ -9,6 +9,8 @@ export class ChannelsFactory {
   private logger = new Logger();
 
   async process(slug, options) {
+    const { user, notificationType } = options;
+
     const channelTypes = {
       email: this.email,
       sms: this.sms,
@@ -18,9 +20,7 @@ export class ChannelsFactory {
 
     if (!channelTypes) throw new BadRequestException('Invalid channel');
 
-    // Render content and header:
-    const { user, notificationType } = options;
-
+    // Render content and title:
     const [title, content] = await Promise.all([
       this.notificationTypesService.renderTemplete(
         notificationType.templates.title,
@@ -41,7 +41,7 @@ export class ChannelsFactory {
 
   async email(options) {
     const { title, content } = options;
-    console.log({
+    console.warn('Email send to the user', {
       title,
       content,
     });
@@ -49,23 +49,22 @@ export class ChannelsFactory {
 
   async sms(options) {
     const { content } = options;
-    console.log({
+    console.warn('SMS send to the user', {
       content,
     });
   }
 
   async whatsapp(options) {
     const { title, content } = options;
-    console.log({
+    console.warn('Whatsapp push notification send to the user', {
       title,
       content,
     });
   }
 
   async UI(options) {
-    const { title, content } = options;
-    console.log({
-      title,
+    const { content } = options;
+    console.warn('UI notification send to the user', {
       content,
     });
   }
