@@ -1,0 +1,32 @@
+version: '3.3'
+services:
+  prod:
+    container_name: notification_service
+    image: notification-service:1.0.0
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    ports:
+      - 3000:3000
+      - 3001:9229
+    networks:
+      - notification-service-network
+    depends_on:
+      - mongodb
+    volumes:
+      - .:/usr/src/app
+      - /usr/src/app/node_modules
+    restart: unless-stopped
+  mongodb:
+    image : mongo:latest
+    container_name: mongodb
+    volumes:
+      - /Volumes:/data/db
+    ports:
+      - 27018:27017
+    networks:
+      - notification-service-network
+    restart: always
+networks:
+    notification-service-network:
+      driver: bridge
