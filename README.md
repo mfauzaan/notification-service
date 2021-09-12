@@ -42,4 +42,4 @@ Docs is generated in swagger after the build, to access the docs, run the applic
 
 ## EOD
 
-![EOD](https://github.com/mfauzaan/notification-service/master/diagram.jpeg?raw=true)
+![EOD](https://github.com/mfauzaan/notification-service/blob/master/diagram.jpeg?raw=true)
