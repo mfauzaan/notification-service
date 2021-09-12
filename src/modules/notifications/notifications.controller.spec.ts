@@ -71,16 +71,17 @@ describe('NotificationsController', () => {
         });
     });
 
-    // it('Company not subscribed to the channel: Email', () => {
-    //   controller
-    //     .create({
-    //       userId: '6139e643ffa5f94b5fefae21',
-    //       companyId: '6138a385dc0d997f5c54585c',
-    //       notificationType: 'monthly-payslip',
-    //       channel: 'email',
-    //     })
-    //     .then(createData => {
-    //       expect(createData).toThrow(BadRequestException);
-    //     });
-    // });
+    it('Company not subscribed to the channel: Email', () => {
+      controller
+        .create({
+          userId: '6139e643ffa5f94b5fefae21',
+          companyId: '6138a385dc0d997f5c54585c',
+          notificationType: 'monthly-payslip',
+          channel: 'email',
+        })
+        .then(createData => {
+          expect(createData).toThrow(BadRequestException);
+        });
+    });
+  });
 });
