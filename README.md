@@ -39,6 +39,3 @@ $ npm run test:cov
 ## Docs
 
 Docs is generated in swagger after the build, to access the docs, run the application and open on  browser with the `host:port/docs`
-
-## License
-Nest is [MIT licensed](LICENSE).
